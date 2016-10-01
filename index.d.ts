@@ -21,6 +21,7 @@ export interface TNSPlayerI {
     playFromUrl(options: AudioPlayerOptions): Promise<any>;
     play(): Promise<boolean>;
     pause(): Promise<boolean>;
+    seekTo(time: number): Promise<any>;
     dispose(): Promise<boolean>;
     isAudioPlaying(): boolean;
     getAudioTrackDuration(): Promise<string>;
@@ -40,6 +41,7 @@ export declare class TNSPlayer {
     playFromFile(options: AudioPlayerOptions): Promise<any>;
     playFromUrl(options: AudioPlayerOptions): Promise<any>;
     pause(): Promise<any>;
+    seekTo(time: number): Promise<any>;
     play(): Promise<any>;
     dispose(): Promise<any>;
     isAudioPlaying(): boolean;
