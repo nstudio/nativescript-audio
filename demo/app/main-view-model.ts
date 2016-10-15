@@ -3,6 +3,7 @@ import * as fs from 'file-system';
 import * as app from 'application';
 import * as color from 'color';
 import * as platform from 'platform';
+import * as dialogs from 'ui/dialogs';
 import { SnackBar } from 'nativescript-snackbar';
 import {TNSRecorder, TNSPlayer, AudioPlayerOptions, AudioRecorderOptions} from 'nativescript-audio';
 
@@ -61,11 +62,11 @@ export class AudioDemo extends Observable {
         metering: true,
 
         infoCallback: () => {
-          console.log();
+          
         },
 
         errorCallback: () => {
-          console.log();
+          
           // snackbar.simple('Error recording.');
         }
       };
@@ -79,10 +80,10 @@ export class AudioDemo extends Observable {
       }, (err) => {
         this.set("isRecording", false);
         this.resetMeter();
-        alert(err);
+        dialogs.alert(err);
       });
     } else {
-      alert("This device cannot record audio.");
+      dialogs.alert("This device cannot record audio.");
     }
   }
 
@@ -134,7 +135,7 @@ export class AudioDemo extends Observable {
 
     var playerOptions: AudioPlayerOptions = {
       audioFile: `~/audio/recording.${this.platformExtension()}`,
-      loop: true,
+      loop: false,
       completeCallback: () => {
         this._SnackBar.simple("Audio file complete");
         this.set("isPlaying", false);
@@ -149,12 +150,12 @@ export class AudioDemo extends Observable {
       },
 
       errorCallback: () => {
-        alert('Error callback');
+        dialogs.alert('Error callback');
         this.set("isPlaying", false);
       },
 
       infoCallback: () => {
-        alert('Info callback');
+        dialogs.alert('Info callback');
       }
     };
 
@@ -196,7 +197,7 @@ export class AudioDemo extends Observable {
         },
 
         infoCallback: (info) => {
-          alert('Info callback: ' + info.msg);
+          dialogs.alert('Info callback: ' + info.msg);
           console.log("what: " + info);
         }
       };

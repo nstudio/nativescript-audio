@@ -8,13 +8,16 @@
         "declaration": true,
         "noEmitOnError": false,
         "noEmitHelpers": true,
-        "noImplicitUseStrict": true
+        "noImplicitUseStrict": true,
+        "noLib": true
     },
     "files": [
+        "manual_typings/base.d.ts",
+        "node_modules/typescript/lib/lib.core.d.ts",
+        "node_modules/tns-platform-declarations/tns-core-modules/android17.d.ts",
+        "node_modules/tns-platform-declarations/tns-core-modules/ios/ios.d.ts",
+        "node_modules/tns-platform-declarations/tns-core-modules/org.nativescript.widgets.d.ts",
         "demo/node_modules/tns-core-modules/tns-core-modules.d.ts",
-        "node_modules/tns-platform-declarations/android17.d.ts",
-        "node_modules/tns-platform-declarations/ios.d.ts",
-        "node_modules/tns-platform-declarations/org.nativescript.widgets.d.ts",
         "audio.android.ts",
         "audio.ios.ts"
     ],

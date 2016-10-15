@@ -4,7 +4,7 @@ import {knownFolders, path} from 'file-system';
 import {TNSPlayerI} from '../common';
 import {AudioPlayerOptions} from '../options';
 
-declare var NSURLSession, AVAudioPlayer, NSURL, AVAudioPlayerDelegate, NSObject: any;
+declare var NSURLSession, AVAudioPlayer, NSURL, AVAudioPlayerDelegate;
 
 export class TNSPlayer extends NSObject implements TNSPlayerI {
   public static ObjCProtocols = [AVAudioPlayerDelegate];
