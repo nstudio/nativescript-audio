@@ -1,6 +1,6 @@
-import {isString} from 'utils/types';
-import {TNSPlayerI} from '../common';
-import {AudioPlayerOptions} from '../options';
+import { isString } from 'utils/types';
+import { TNSPlayerI } from '../common';
+import { AudioPlayerOptions } from '../options';
 import * as app from 'application';
 import * as utils from 'utils/utils';
 import * as fs from 'file-system';
@@ -219,5 +219,9 @@ export class TNSPlayer implements TNSPlayerI {
         reject(ex);
       }
     });
+  }
+
+  public get currentTime(): number {
+    return this.player ? this.player.getCurrentPosition() : 0;
   }
 }

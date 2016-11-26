@@ -1,15 +1,15 @@
 import * as app from 'application';
-import {isString} from 'utils/types';
-import {knownFolders, path} from 'file-system';
-import {TNSPlayerI} from '../common';
-import {AudioPlayerOptions} from '../options';
+import { isString } from 'utils/types';
+import { knownFolders, path } from 'file-system';
+import { TNSPlayerI } from '../common';
+import { AudioPlayerOptions } from '../options';
 var utils = require('utils/utils');
 
 declare var NSURLSession, AVAudioPlayer, NSURL, AVAudioPlayerDelegate;
 
 export class TNSPlayer extends NSObject implements TNSPlayerI {
   public static ObjCProtocols = [AVAudioPlayerDelegate];
-  private _player: any;
+  private _player: AVAudioPlayer;
   private _task: any;
   private _completeCallback: any;
   private _errorCallback: any;
@@ -189,5 +189,9 @@ export class TNSPlayer extends NSObject implements TNSPlayerI {
       this._task.cancel();
       this._task = undefined;
     }
+  }
+
+  public get currentTime(): number {
+    return this._player ? this._player.currentTime : 0;
   }
 }

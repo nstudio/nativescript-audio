@@ -48,10 +48,7 @@
   "bugs": {
     "url": "https://github.com/bradmartin/nativescript-audio/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/bradmartin/nativescript-audio/blob/master/LICENSE"
-  },
+  "license": "MIT",
   "homepage": "https://github.com/bradmartin/nativescript-audio",
   "readmeFilename": "README.md",
   "devDependencies": {
