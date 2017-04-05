@@ -42,7 +42,7 @@ export class YourClass {
 	
 	constructor() {
 		this._player = new TNSPlayer();
-		this._player.initWithFile({
+		this._player.initFromFile({
 			audioFile: '~/audio/song.mp3', // ~ = app directory
 			loop: false,
 			completeCallback: this._trackComplete.bind(this),
