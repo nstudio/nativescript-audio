@@ -234,7 +234,7 @@ export class TNSPlayer implements TNSPlayerI {
   }
 
   public isAudioPlaying(): boolean {
-    return this.player.isPlaying();
+    return this.player ? this.player.isPlaying() : false;
   }
 
   public getAudioTrackDuration(): Promise<string> {
