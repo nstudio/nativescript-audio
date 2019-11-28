@@ -58,6 +58,23 @@ Note: You will need to grant permissions on iOS to allow the device to access th
 
 ### TypeScript Example
 
+Remember to add the filetypes you will be using in your webpack.config.js file
+
+```typescript
+    ...
+    plugins: [
+            ...
+            new CopyWebpackPlugin([
+                ...
+                { from: { glob: "**/*.wav" } },
+                { from: { glob: "**/*.mp3" } },
+                ...
+            ], 
+            ...
+        ],
+        ...
+```
+
 ```typescript
 import { TNSPlayer } from 'nativescript-audio';
 
