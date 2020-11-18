@@ -14,6 +14,7 @@ export enum AudioFocusDurationHint {
 
 export class TNSPlayer implements TNSPlayerI {
   private _mediaPlayer: android.media.MediaPlayer;
+  private _audioFocusRequest: android.media.AudioFocusRequest;
   private _mAudioFocusGranted: boolean = false;
   private _lastPlayerVolume; // ref to the last volume setting so we can reset after ducking
   private _events: Observable;
@@ -304,21 +305,37 @@ export class TNSPlayer implements TNSPlayerI {
    * Helper method to ensure audio focus.
    */
   private _requestAudioFocus(): boolean {
-    // If it does not enter the codition block, means that we already
+    // If it does not enter the condition block, means that we already
     // have focus. Therefore we have to start with `true`.
     let result = true;
+    let focusResult = null;
     if (!this._mAudioFocusGranted) {
       const ctx = this._getAndroidContext();
       const am = ctx.getSystemService(
         android.content.Context.AUDIO_SERVICE
       ) as android.media.AudioManager;
-      // Request audio focus for play back
-      const focusResult = am.requestAudioFocus(
-        this._mOnAudioFocusChangeListener,
-        android.media.AudioManager.STREAM_MUSIC,
-        this._durationHint
-      );
 
+      // Request audio focus for play back
+      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        const playbackAttributes = new android.media.AudioAttributes.Builder()
+          .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+          .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+          .build();
+
+        this._audioFocusRequest = new android.media.AudioFocusRequest.Builder(android.media.AudioManager.AUDIOFOCUS_GAIN)
+          .setAudioAttributes(playbackAttributes)
+          .setAcceptsDelayedFocusGain(true)
+          .setOnAudioFocusChangeListener(this._mOnAudioFocusChangeListener)
+          .build();
+        focusResult = am.requestAudioFocus(this._audioFocusRequest);
+      } else {
+        focusResult = am.requestAudioFocus(
+          this._mOnAudioFocusChangeListener,
+          android.media.AudioManager.STREAM_MUSIC,
+          this._durationHint
+        );
+      }
+      
       if (
         focusResult === android.media.AudioManager.AUDIOFOCUS_REQUEST_GRANTED
       ) {
@@ -327,13 +344,22 @@ export class TNSPlayer implements TNSPlayerI {
         result = false;
       }
     }
+
     return result;
   }
 
   private _abandonAudioFocus(preserveMP: boolean = false): void {
     const ctx = this._getAndroidContext();
     const am = ctx.getSystemService(android.content.Context.AUDIO_SERVICE);
-    const result = am.abandonAudioFocus(this._mOnAudioFocusChangeListener);
+    let result = null;
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+      result = am.abandonAudioFocusRequest(this._audioFocusRequest);
+      this._audioFocusRequest = null;
+    } else {
+      result = am.abandonAudioFocus(this._mOnAudioFocusChangeListener);
+    }
+
     // Normally we will preserve the MediaPlayer only when pausing
     if (this._mediaPlayer && !preserveMP) {
       this._mediaPlayer.release();
