@@ -31,7 +31,6 @@ export interface AudioPlayerOptions {
   audioMixing?: boolean;
 
   pitch?: number;
-  
   /**
    * Gets or sets the callback when an error occurs with the audio player.
    * @returns {Object} An object containing the native values for the error callback.
