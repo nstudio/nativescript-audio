@@ -22,6 +22,8 @@ export interface AudioPlayerOptions {
   metering?: boolean;
   audioMixing?: boolean;
 
+  pitch?: number;
+
   /**
    * Callback to execute when playback has completed.
    * @returns {Object} An object containing the native values for the callback.

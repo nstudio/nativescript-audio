@@ -1,7 +1,7 @@
 {
-    "name": "nativescript-audio",
+    "name": "nativescript-audio-with-pitch",
     "description": "",
-    "version": "6.2.1",
+    "version": "1.0.1",
     "scripts": {
         "ci.base.setup": "npm i -g typescript && echo no | npm i -g nativescript && tns usage-reporting disable && tns error-reporting disable && cd src && npm i && tsc",
         "ci.pip.install": "sudo pip install --upgrade pip && sudo pip install six",
