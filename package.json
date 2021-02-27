@@ -1,9 +1,12 @@
 {
-  "scripts": {
-    "ci.base.setup": "npm i -g typescript && echo no | npm i -g nativescript && tns usage-reporting disable && tns error-reporting disable && cd src && npm i && tsc",
-    "ci.pip.install": "sudo pip install --upgrade pip && sudo pip install six",
-    "ci.tslint": "cd src && npm run ci.tslint && cd ../demo && npm run ci.tslint",
-    "ci.vanilla.android.build": "cd demo && tns build android --env.uglify",
-    "ci.vanilla.ios.build": "cd demo && tns build ios --env.uglify"
-  }
+    "name": "nativescript-audio",
+    "description": "",
+    "version": "6.2.1",
+    "scripts": {
+        "ci.base.setup": "npm i -g typescript && echo no | npm i -g nativescript && tns usage-reporting disable && tns error-reporting disable && cd src && npm i && tsc",
+        "ci.pip.install": "sudo pip install --upgrade pip && sudo pip install six",
+        "ci.tslint": "cd src && npm run ci.tslint && cd ../demo && npm run ci.tslint",
+        "ci.vanilla.android.build": "cd demo && tns build android --env.uglify",
+        "ci.vanilla.ios.build": "cd demo && tns build ios --env.uglify"
+    }
 }
