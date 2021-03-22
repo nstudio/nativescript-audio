@@ -424,7 +424,7 @@ export class TNSPlayer implements TNSPlayerI {
 
             if (this._options && !this._options.loop) {
               // Make sure that we abandon audio focus when playback stops
-              this._abandonAudioFocus();
+              this._abandonAudioFocus(true);
             }
           }
         })
