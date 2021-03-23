@@ -97,11 +97,6 @@ export class TNSPlayer implements TNSPlayerI {
           options.autoPlay = true;
         }
 
-        // request audio focus, this will setup the onAudioFocusChangeListener
-        if (!options.audioMixing) {
-          this._mAudioFocusGranted = this._requestAudioFocus();
-        }
-
         const audioPath = resolveAudioFilePath(options.audioFile);
         this._player.setAudioStreamType(
           android.media.AudioManager.STREAM_MUSIC
@@ -187,9 +182,11 @@ export class TNSPlayer implements TNSPlayerI {
         console.log('player play()');
         if (this._player && !this._player.isPlaying()) {
           // request audio focus, this will setup the onAudioFocusChangeListener
-          this._mAudioFocusGranted = this._requestAudioFocus();
-          if (!this._mAudioFocusGranted) {
-            throw new Error('Could not request audio focus');
+          if (!this._options.audioMixing) {
+            this._mAudioFocusGranted = this._requestAudioFocus();
+            if (!this._mAudioFocusGranted) {
+              throw new Error('Could not request audio focus');
+            }
           }
 
           this._sendEvent(AudioPlayerEvents.started);
