@@ -380,7 +380,6 @@ export class TNSPlayer implements TNSPlayerI {
     } else {
       console.log('Failed to abandon audio focus.');
     }
-    this._mOnAudioFocusChangeListener = null;
   }
 
   private _getAndroidContext() {
