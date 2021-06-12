@@ -1,9 +1,4 @@
-import {
-  knownFolders,
-  Observable,
-  path as nsFilePath,
-  Utils
-} from '@nativescript/core';
+import { knownFolders, Observable, path as nsFilePath, Utils } from '@nativescript/core';
 import { TNSPlayerI } from '../common';
 import { AudioPlayerOptions } from '../options';
 
@@ -50,6 +45,7 @@ export class TNSPlayer extends Observable implements TNSPlayerI {
 
   private _player: AVAudioPlayer;
   private _task: NSURLSessionDataTask;
+  private delegate: TNSPlayerDelegate;
 
   get ios(): any {
     return this._player;
@@ -143,8 +139,9 @@ export class TNSPlayer extends Observable implements TNSPlayerI {
           reject(errorRef.value);
           return;
         } else if (this._player) {
-          this._player.delegate = TNSPlayerDelegate.initWithOwner(this);
-
+          if (this.delegate === undefined)
+            this.delegate = TNSPlayerDelegate.initWithOwner(this);
+          this._player.delegate = this.delegate;
           // enableRate to change playback speed
           this._player.enableRate = true;
 
@@ -381,6 +378,9 @@ export class TNSPlayer extends Observable implements TNSPlayerI {
   private _reset() {
     if (this._player) {
       this._player = undefined;
+    }
+    if (this.delegate) {
+      this.delegate = undefined;
     }
     if (this._task) {
       this._task.cancel();
