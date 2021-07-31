@@ -10,9 +10,6 @@
     <a href="https://www.npmjs.com/package/nativescript-audio">
         <img src="https://img.shields.io/npm/v/nativescript-audio.svg" alt="npm">
     </a>
-    <a href="https://www.npmjs.com/package/nativescript-audio">
-        <img src="https://img.shields.io/npm/dt/nativescript-audio.svg?label=npm%20downloads" alt="npm">
-    </a>
 </p>
 
 ---
