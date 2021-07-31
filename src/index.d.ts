@@ -201,7 +201,13 @@ export declare class TNSPlayer {
    * the system and the other application that previously held audio focus.
    * See the {@link https://developer.android.com/reference/android/media/AudioFocusRequest#the-different-types-of-focus-requests different  types of focus requests}
    */
-  constructor(durationHint?: AudioFocusDurationHint);
+  constructor(durationHint?: AudioFocusDurationHint | AudioFocusManager);
+
+  /**
+   * Sets the audio focus manager for this player
+   * @param manager new Audio Focus Manager
+   */
+  setAudioFocusManager(manager: AudioFocusManager);
 
   initFromFile(options: AudioPlayerOptions): Promise<any>;
 
@@ -374,4 +380,18 @@ export enum AudioFocusDurationHint {
    */
   AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE = android.media.AudioManager
     .AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+}
+
+export interface AudioFocusManagerOptions {
+  durationHint?: AudioFocusDurationHint;
+  usage?: number; // android.media.AudioAttributes.USAGE_MEDIA
+  contentType?: number; // android.media.AudioAttributes.CONTENT_TYPE_MUSIC
+}
+export interface AudioFocusChangeEventData extends EventData {
+  focusChange: number;
+}
+
+export class AudioFocusManager extends Observable {
+  constructor(options?: AudioFocusManagerOptions);
+  on(event: 'audioFocusChange', callback: (data: AudioFocusChangeEventData) => void, thisArg?: any);
 }

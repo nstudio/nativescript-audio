@@ -38,6 +38,9 @@ export class TNSPlayerDelegate
   }
 }
 
+export class AudioFocusManager extends Observable {
+}
+
 export class TNSPlayer extends Observable implements TNSPlayerI {
   completeCallback: any;
   errorCallback: any;
@@ -72,6 +75,8 @@ export class TNSPlayer extends Observable implements TNSPlayerI {
   get currentTime(): number {
     return this._player ? this._player.currentTime : 0;
   }
+
+  public setAudioFocusManager(manager: any) {}
 
   public initFromFile(options: AudioPlayerOptions): Promise<any> {
     return new Promise((resolve, reject) => {
