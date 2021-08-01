@@ -9,7 +9,7 @@ export enum AudioFocusDurationHint {
   AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK = android.media.AudioManager
     .AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK,
   AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE = android.media.AudioManager
-    .AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+    .AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE
 }
 
 const defaultAudioFocusManagerOptions: AudioFocusManagerOptions = {
