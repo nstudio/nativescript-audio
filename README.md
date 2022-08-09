@@ -76,7 +76,7 @@ export class YourClass {
     this._player.debug = true; // set true to enable TNSPlayer console logs for debugging.
     this._player
       .initFromFile({
-        audioFile: '~/audio/song.mp3', // ~ = app directory
+        audioFile: '~/assets/song.mp3', // ~ = app directory
         loop: false,
         completeCallback: this._trackComplete.bind(this),
         errorCallback: this._trackError.bind(this)
