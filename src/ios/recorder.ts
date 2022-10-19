@@ -1,7 +1,7 @@
 import { Observable } from '@nativescript/core';
 import { TNSRecordI } from '../common';
 import { AudioRecorderOptions } from '../options';
-
+declare var kAudioFormatAppleLossless, kAudioFormatMPEG4AAC;
 @NativeClass()
 class TNSRecorderDelegate
   extends NSObject
@@ -81,36 +81,46 @@ export class TNSRecorder extends Observable implements TNSRecordI {
         this._recordingSession.setActiveError(true, null);
         this._recordingSession.requestRecordPermission((allowed: boolean) => {
           if (allowed) {
-            // var recordSetting = new NSMutableDictionary((<any>[NSNumber.numberWithInt(kAudioFormatMPEG4AAC), NSNumber.numberWithInt((<any>AVAudioQuality).Medium.rawValue), NSNumber.numberWithFloat(16000.0), NSNumber.numberWithInt(1)]),
-            //   (<any>["AVFormatIDKey", "AVEncoderAudioQualityKey", "AVSampleRateKey", "AVNumberOfChannelsKey"]));
-
             const recordSetting = NSMutableDictionary.alloc().init();
-
-            if (options.format) {
-              recordSetting.setValueForKey(
-                NSNumber.numberWithInt(options.format),
-                'AVFormatIDKey'
-              );
-            } else {
-              recordSetting.setValueForKey(
-                NSNumber.numberWithInt(kAudioFormatMPEG4AAC),
-                'AVFormatIDKey'
-              );
-            }
-            // recordSetting.setValueForKey(
-            //   NSNumber.numberWithInt((<any>AVAudioQuality).Medium.rawValue),
-            //   'AVEncoderAudioQualityKey'
-            // );
+            let format = options.format ? options.format : kAudioFormatAppleLossless;
+            console.log(`setting format: ${format}`);
             recordSetting.setValueForKey(
-              NSNumber.numberWithInt(AVAudioQuality.Medium),
+              NSNumber.numberWithInt(format),
+              'AVFormatIDKey'
+            );
+            
+            let avAudioQualityValue = AVAudioQuality.Medium;
+            if (options.iosAudioQuality) {
+              if (options.iosAudioQuality == 'Min') {
+                avAudioQualityValue = AVAudioQuality.Min;
+              } else if (options.iosAudioQuality == 'Low') {
+                avAudioQualityValue = AVAudioQuality.Low
+              } else if (options.iosAudioQuality == 'Medium') {
+                avAudioQualityValue = AVAudioQuality.Medium
+              } else if (options.iosAudioQuality == 'High') {
+                avAudioQualityValue = AVAudioQuality.High
+              } else if (options.iosAudioQuality == 'Max') {
+                avAudioQualityValue = AVAudioQuality.Max
+              }
+            }
+            console.log(`setting format: ${avAudioQualityValue}`); // https://developer.apple.com/documentation/avfaudio/avaudioquality;
+            recordSetting.setValueForKey(
+              NSNumber.numberWithInt(avAudioQualityValue),
               'AVEncoderAudioQualityKey'
             );
+
+            let sampleRate: number = 44100.0;
+            if (options.sampleRate) sampleRate = parseFloat(parseInt(options.sampleRate).toFixed(1));
+            console.log(`setting sampleRate: ${sampleRate}`);
             recordSetting.setValueForKey(
-              NSNumber.numberWithFloat(16000.0),
+              NSNumber.numberWithFloat(sampleRate),
               'AVSampleRateKey'
             );
+
+            let channels = options.channels ? options.channels : 1;
+            console.log(`setting channels: ${channels}`);
             recordSetting.setValueForKey(
-              NSNumber.numberWithInt(1),
+              NSNumber.numberWithInt(channels),
               'AVNumberOfChannelsKey'
             );
 

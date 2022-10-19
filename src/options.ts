@@ -93,6 +93,11 @@ export interface AudioRecorderOptions {
   encoder?: any;
 
   /**
+   * Sets the ios audio quality setting. Options are Min|Low|Medium|High|Max. Set to Medium by default.
+   */
+  iosAudioQuality?: string;
+
+  /**
    * Gets or sets the callback when an error occurs with the media recorder.
    * @returns {Object} An object containing the native values for the error callback.
    */

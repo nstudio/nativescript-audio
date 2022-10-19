@@ -1,6 +1,6 @@
 {
   "name": "nativescript-audio",
-  "version": "6.2.6",
+  "version": "6.3.0",
   "description": "NativeScript plugin to record and play audio.",
   "main": "audio",
   "typings": "index.d.ts",
@@ -61,6 +61,10 @@
       "name": "Nathan Walker",
       "email": "walkerrunpdx@gmail.com",
       "url": "https://github.com/NathanWalker"
+    },
+    {
+      "name": "Dave Coffin",
+      "url": "https://github.com/davecoffin"
     },
     {
       "name": "Jibon Lawrence Costa",

@@ -110,6 +110,45 @@ export class YourClass {
     // Android only: extra detail on error
     console.log('extra info on the error:', args.extra);
   }
+
+  // This is an example method for watching audio meters and converting the values from Android's arbitrary 
+  // value to something close to dB. iOS reports values from -120 to 0, android reports values from 0 to about 37000.
+  // The below method converts the values to db as close as I could figure out. You can tweak the .1 value to your discretion.
+  // I am basically converting these numbers to something close to a percentage value. My handle Meter UI method
+  // converts that value to a value I can use to pulse a circle bigger and smaller, representing your audio level. 
+  private _initMeter() {
+    this._resetMeter();
+    this._meterInterval = this._win.setInterval(() => {
+      this.audioMeter = this._recorder.getMeters();
+      if (isIOS) {
+        this.handleMeterUI(this.audioMeter+200)
+      } else {
+        let db = (20 * Math.log10(parseInt(this.audioMeter) / .1)); 
+        let percentage = db + 85; 
+        this.handleMeterUI(percentage)
+      }
+    }, 150);
+  }
+
+  handleMeterUI(percentage) {
+    let scale = percentage/100;
+
+    function map_range(value, in_low, in_high, out_low, out_high) {
+      return out_low + (out_high - out_low) * (value - in_low) / (in_high - in_low);
+    }
+    let lerpScale = map_range(scale, 1.2, 1.9, 0.1, 2.1)
+    if (scale > 0) {
+      this.levelMeterCircleUI.animate({
+        scale: {x: lerpScale, y: lerpScale},
+        duration: 100
+      }).then(() => {}).catch(() => {})
+    }
+    if (lerpScale > 2.2) {
+      this.levelBgColor = 'rgba(255, 0, 0, 1)';
+    } else {
+      this.levelBgColor = 'rgb(0, 183, 0)';
+    }
+  }
 }
 ```
 
@@ -169,6 +208,23 @@ player
 | ios      | Get the native AVAudioRecorder class instance.             |
 | android  | Get the native MediaRecorder class instance.               |
 | debug    | Set true to enable debugging console logs (default false). |
+
+#### TNSRecorder AudioRecorderOptions
+
+| Property          | Type          | Description                                                |
+| --------          | ------        |---------------------------------------------------------- |
+| filename          | string        | Gets or sets the recorded file name.             |
+| source            | int           |**Android Only** Sets the source for recording. Learn more here https://developer.android.com/reference/android/media/MediaRecorder.AudioSource               |
+| maxDuration       | int           |Gets or set the max duration of the recording session. Input in milliseconds, which is Android's format. Will be converted appropriately for iOS. |
+| metering          | boolean       |Enables metering. This will allow you to inspect the audio level by calling the record instance's `getMeters` ,method. This will return dB on iOS, but an arbitrary amplitude number for Android. See the metering example for a way to convert the output to something resembling dB on Android. |
+| format            | int or enum   |The Audio format to record in. On Android, use these Enums: https://developer.android.com/reference/android/media/AudioFormat#ENCODING_PCM_16BIT On ios, use these format options: https://developer.apple.com/documentation/coreaudiotypes/1572096-audio_format_identifiers |
+| channels          | int           | Number of channels to record (mono, st) |
+| sampleRate        | int           | The sample rate to record in. Default: 44100 |
+| bitRate           | int           | **Android Only** The bitrate to record in. iOS automatically calculates based on `iosAudioQuality` flag. Default: 128000 |
+| encoder           | int or enum   | **Android Only**  Use https://developer.android.com/reference/android/media/MediaRecorder.AudioEncoder#AAC |
+| iosAudioQuality   | string        | ios uses AVAudioQuality to determine encoder and bitrate. Accepts Min, Low, Medium, High, Max https://developer.apple.com/documentation/avfaudio/avaudioquality |
+| errorCallback     | function      | Gets or sets the callback when an error occurs with the media recorder. Returns An object containing the native values for the error callback. |
+| infoCallback      | function      | Gets or sets the callback to be invoked to communicate some info and/or warning about the media or its playback. Returns An object containing the native values for the info callback. |
 
 ### Player
 

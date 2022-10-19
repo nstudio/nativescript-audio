@@ -59,25 +59,26 @@ export class TNSRecorder implements TNSRecordI {
         } else {
           this._recorder = new android.media.MediaRecorder();
         }
-
-        const audioSource = options.source ? options.source : 0;
+        
+        const audioSource = options.source ? options.source : android.media.MediaRecorder.AudioSource.DEFAULT; // https://developer.android.com/reference/android/media/MediaRecorder.AudioSource
         this._recorder.setAudioSource(audioSource);
 
-        const outFormat = options.format ? options.format : 0;
+        const outFormat = options.format ? options.format : android.media.AudioFormat.ENCODING_PCM_16BIT; // https://developer.android.com/reference/android/media/AudioFormat#ENCODING_PCM_16BIT
         this._recorder.setOutputFormat(outFormat);
 
-        const encoder = options.encoder ? options.encoder : 0;
+        const encoder = options.encoder ? options.encoder : android.media.MediaRecorder.AudioEncoder.AAC; // https://developer.android.com/reference/android/media/MediaRecorder.AudioEncoder#AAC
         this._recorder.setAudioEncoder(encoder);
 
         if (options.channels) {
           this._recorder.setAudioChannels(options.channels);
         }
-        if (options.sampleRate) {
-          this._recorder.setAudioSamplingRate(options.sampleRate);
-        }
-        if (options.bitRate) {
-          this._recorder.setAudioEncodingBitRate(options.bitRate);
-        }
+
+        let sampleRate = options.sampleRate ? options.sampleRate : 44100;
+        this._recorder.setAudioSamplingRate(sampleRate);
+
+        let bitRate = options.bitRate ? options.bitRate : 128000;
+        this._recorder.setAudioEncodingBitRate(bitRate);
+        
         if (options.maxDuration) {
           this._recorder.setMaxDuration(options.maxDuration);
         }
